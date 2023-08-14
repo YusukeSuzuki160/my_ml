@@ -4,7 +4,6 @@
 #include <vector>
 #include <cmath>
 #include "point.hpp"
-#include "matplotlib-cpp/matplotlibcpp.h"
 
 std::vector<Point<double>> make_wave(int n_samples=100) {
   std::random_device rd;
@@ -23,18 +22,3 @@ std::vector<Point<double>> make_wave(int n_samples=100) {
   return wavedata;
 }
 
-int main() {
-  std::vector<Point<double>> wavedata = make_wave(100);
-
-  for (auto &p : wavedata) {
-    p.print();
-  }
-  std::vector<double> x, y;
-  for (auto &p : wavedata) {
-    x.push_back(p.x());
-    y.push_back(p.y());
-  }
-  matplotlibcpp::scatter(x, y);
-  matplotlibcpp::save("data1.png");
-  return 0;
-}
