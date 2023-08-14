@@ -2,18 +2,27 @@
 
 #include <vector>
 #include <random>
+#include <tuple>
+#include <algorithm>
 
 template <typename T>
-std::vector<T> train_test_split(const std::vector<T>& data, double test_size = 0.2, int random_state = 0) {
-    std::vector<T> train, test;
-    std::mt19937 gen(random_state);
-    std::bernoulli_distribution dist(1.0 - test_size);
-    for (const auto& x : data) {
-        if (dist(gen)) {
-            train.push_back(x);
-        } else {
-            test.push_back(x);
-        }
+std::tuple<std::vector<T>, std::vector<T>, std::vector<int>, std::vector<int>> train_test_split(const std::vector<T> data, const std::vector<int> labels, double test_size = 0.25, int random_state = 0) {
+  std::vector<T> train_data, test_data;
+  std::vector<int> train_labels, test_labels;
+  std::vector<int> indices(data.size());
+  for (int i = 0; i < data.size(); i++) {
+    indices[i] = i;
+  }
+  std::shuffle(indices.begin(), indices.end(), std::mt19937(random_state));
+  int test_size_int = data.size() * test_size;
+  for (int i = 0; i < data.size(); i++) {
+    if (i < test_size_int) {
+      test_data.push_back(data[indices[i]]);
+      test_labels.push_back(labels[indices[i]]);
+    } else {
+      train_data.push_back(data[indices[i]]);
+      train_labels.push_back(labels[indices[i]]);
     }
-    return {train, test};
+  }
+  return std::make_tuple(train_data, test_data, train_labels, test_labels);
 }

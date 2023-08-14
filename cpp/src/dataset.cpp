@@ -22,3 +22,15 @@ std::vector<Point<double>> make_wave(int n_samples=100) {
   return wavedata;
 }
 
+std::vector<int> make_labels(int n_samples=100, int n_classes=2) {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(0, n_classes - 1);
+
+  std::vector<int> labels;
+
+  for (int i = 0; i < n_samples; i++) {
+    labels.push_back(dis(gen));
+  }
+  return labels;
+}

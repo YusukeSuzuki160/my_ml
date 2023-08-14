@@ -50,23 +50,23 @@ class KNN {
       }
       return max_label;
     } 
+    double score(std::vector<Point<double>> test_points, std::vector<int> test_labels) {
+      int correct = 0;
+      for (int i = 0; i < test_points.size(); i++) {
+        if (predict(test_points[i]) == test_labels[i]) {
+          correct++;
+        }
+      }
+      return (double) correct / test_points.size();
+    }
 };
 
 int main() {
-  std::vector<Point<double>> points;
-  std::vector<int> labels;
-  points.push_back(Point<double>(1.0, 1.0));
-  points.push_back(Point<double>(2.0, 2.0));
-  points.push_back(Point<double>(3.0, 3.0));
-  points.push_back(Point<double>(4.0, 4.0));
-  points.push_back(Point<double>(5.0, 5.0));
-  labels.push_back(1);
-  labels.push_back(1);
-  labels.push_back(1);
-  labels.push_back(2);
-  labels.push_back(2);
-  KNN knn(3, points, labels);
-  Point<double> p(1.5, 1.5);
-  std::cout << knn.predict(p) << std::endl;
-  return 0;
+  std::vector<Point<double>> points = make_wave(100);
+  std::vector<int> labels = make_labels(100, 2);
+  std::vector<Point<double>> train_points, test_points;
+  std::vector<int> train_labels, test_labels;
+  std::tie(train_points, test_points, train_labels, test_labels) = train_test_split(points, labels);
+  KNN knn(3, train_points, train_labels);
+  std::cout << knn.score(test_points, test_labels) << std::endl;
 }
